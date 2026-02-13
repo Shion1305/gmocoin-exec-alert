@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gmocoin-exec-alert.fullname" . }}
+  labels:
+    {{- include "gmocoin-exec-alert.labels" . | nindent 4 }}
+data:
+  ALERT_CHANNELS: {{ .Values.alertChannels | quote }}
+  PAGERDUTY_SOURCE: {{ .Values.pagerduty.source | quote }}
+  PAGERDUTY_SEVERITY: {{ .Values.pagerduty.severity | quote }}
+  PAGERDUTY_DRY_RUN: {{ .Values.pagerduty.dryRun | quote }}
+  PROCESS_MONITOR_ENABLED: {{ .Values.processMonitor.enabled | quote }}
+  PROCESS_MONITOR_PATTERN: {{ .Values.processMonitor.pattern | quote }}
+  PROCESS_MONITOR_CHECK_INTERVAL_SEC: {{ .Values.processMonitor.checkIntervalSec | quote }}
+  PROCESS_MONITOR_IDLE_THRESHOLD_SEC: {{ .Values.processMonitor.idleThresholdSec | quote }}
+  HTTP_TIMEOUT_SEC: {{ .Values.tuning.httpTimeoutSec | quote }}
+  WS_AUTH_EXTEND_INTERVAL_SEC: {{ .Values.tuning.wsAuthExtendIntervalSec | quote }}
+  RECONNECT_BACKOFF_BASE_SEC: {{ .Values.tuning.reconnectBackoffBaseSec | quote }}
+  RECONNECT_BACKOFF_MAX_SEC: {{ .Values.tuning.reconnectBackoffMaxSec | quote }}
+  DEDUP_TTL_SEC: {{ .Values.tuning.dedupTtlSec | quote }}
+  DEDUP_MAX_KEYS: {{ .Values.tuning.dedupMaxKeys | quote }}
+  LOG_LEVEL: {{ .Values.tuning.logLevel | quote }}
+  {{- if .Values.gmocoin.privateApiBase }}
+  GMOCOIN_PRIVATE_API_BASE: {{ .Values.gmocoin.privateApiBase | quote }}
+  {{- end }}
+  {{- if .Values.gmocoin.privateWsBase }}
+  GMOCOIN_PRIVATE_WS_BASE: {{ .Values.gmocoin.privateWsBase | quote }}
+  {{- end }}
+  {{- if .Values.pagerduty.eventsApiUrl }}
+  PAGERDUTY_EVENTS_API_URL: {{ .Values.pagerduty.eventsApiUrl | quote }}
+  {{- end }}

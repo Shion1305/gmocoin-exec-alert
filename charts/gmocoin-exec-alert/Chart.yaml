@@ -1,0 +1,13 @@
+apiVersion: v2
+name: gmocoin-exec-alert
+description: GMO Coin execution alerts and ML job monitoring with PagerDuty integration
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - gmocoin
+  - pagerduty
+  - monitoring
+  - alerts
+maintainers:
+  - name: shion

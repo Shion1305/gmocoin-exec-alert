@@ -1,0 +1,50 @@
+# Git
+.git/
+.gitignore
+.github/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Documentation
+gmocoin-doc/
+*.md
+!README.md
+
+# CI/CD
+.github/
+
+# Cache
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Helm
+charts/

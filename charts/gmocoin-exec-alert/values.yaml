@@ -1,0 +1,99 @@
+# Default values for gmocoin-exec-alert
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/GITHUB_USERNAME/gmocoin-exec-alert
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Configure GMO Coin API credentials
+# These will be stored in a Kubernetes Secret
+gmocoin:
+  # Set these via --set or values file (not committed to git)
+  apiKey: ""
+  apiSecret: ""
+  # Optional: override API endpoints
+  privateApiBase: ""
+  privateWsBase: ""
+
+# Configure PagerDuty integration
+pagerduty:
+  # Set this via --set or values file (not committed to git)
+  routingKey: ""
+  # Optional overrides
+  eventsApiUrl: ""
+  source: "gmocoin-exec-alert"
+  severity: "critical"
+  dryRun: false
+
+# Alert channels to subscribe to (comma-separated)
+alertChannels: "executionEvents"
+
+# Process monitoring configuration
+processMonitor:
+  enabled: false
+  pattern: "uv run atc"
+  checkIntervalSec: 5
+  idleThresholdSec: 60
+
+# Tuning parameters
+tuning:
+  httpTimeoutSec: 10
+  wsAuthExtendIntervalSec: 3000
+  reconnectBackoffBaseSec: 1
+  reconnectBackoffMaxSec: 30
+  dedupTtlSec: 300
+  dedupMaxKeys: 5000
+  logLevel: "INFO"
+
+# Node selector for pod assignment
+nodeSelector: {}
+
+# Tolerations for pod assignment
+tolerations: []
+
+# Affinity for pod assignment
+affinity: {}
+
+# Enable if you need to use an existing secret
+existingSecret: ""

@@ -1,0 +1,32 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To get the status of your deployment, run:
+
+  kubectl get deployment {{ include "gmocoin-exec-alert.fullname" . }} -n {{ .Release.Namespace }}
+
+To view the logs:
+
+  kubectl logs -f deployment/{{ include "gmocoin-exec-alert.fullname" . }} -n {{ .Release.Namespace }}
+
+{{- if not .Values.gmocoin.apiKey }}
+WARNING: GMO Coin API Key is not set!
+Please update your values.yaml or use --set gmocoin.apiKey=YOUR_API_KEY
+{{- end }}
+
+{{- if not .Values.gmocoin.apiSecret }}
+WARNING: GMO Coin API Secret is not set!
+Please update your values.yaml or use --set gmocoin.apiSecret=YOUR_API_SECRET
+{{- end }}
+
+{{- if not .Values.pagerduty.routingKey }}
+WARNING: PagerDuty Routing Key is not set!
+Please update your values.yaml or use --set pagerduty.routingKey=YOUR_ROUTING_KEY
+{{- end }}
+
+{{- if .Values.processMonitor.enabled }}
+Process monitoring is ENABLED for pattern: {{ .Values.processMonitor.pattern }}
+{{- else }}
+Process monitoring is DISABLED. Set processMonitor.enabled=true to enable.
+{{- end }}
