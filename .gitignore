@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+dist/
+build/
+*.egg-info/
+
+# IDE
+.idea/
+
+# Documentation repository
+gmocoin-doc/
+
