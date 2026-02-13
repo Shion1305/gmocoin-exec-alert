@@ -37,6 +37,7 @@ The monitor will:
 - Watch for processes matching the pattern
 - When processes are detected, track them continuously
 - Send a PagerDuty alert when all processes are gone for the configured threshold (default: 60 seconds)
+- Auto-resolve the PagerDuty incident when processes restart
 
 Example `.env` configuration:
 ```bash

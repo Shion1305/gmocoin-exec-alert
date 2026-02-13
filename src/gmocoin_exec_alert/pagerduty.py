@@ -65,3 +65,24 @@ class PagerDutyClient:
                 f"PagerDuty error: {resp.status_code} {resp.text} (dedup_key={dedup_key})"
             )
 
+    async def resolve(
+        self,
+        *,
+        dedup_key: str,
+    ) -> None:
+        """Resolve an incident with the given dedup_key."""
+        if self._dry_run:
+            return
+
+        body = {
+            "routing_key": self._routing_key,
+            "event_action": "resolve",
+            "dedup_key": dedup_key,
+        }
+
+        resp = await self._client.post(self._events_api_url, json=body)
+        if resp.status_code != 202:
+            raise RuntimeError(
+                f"PagerDuty resolve error: {resp.status_code} {resp.text} (dedup_key={dedup_key})"
+            )
+

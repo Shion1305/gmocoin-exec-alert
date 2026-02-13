@@ -35,6 +35,8 @@ class ProcessMonitor:
         self._logger = logger or logging.getLogger(__name__)
         self._last_seen_time: datetime | None = None
         self._has_notified = False
+        # Use a stable dedup_key so we can resolve the same incident
+        self._dedup_key = "ml-job-monitoring"
 
     def _find_matching_processes(self) -> list[ProcessInfo]:
         """Find all processes matching the pattern using ps command."""
@@ -108,8 +110,13 @@ class ProcessMonitor:
 
             if processes:
                 # Processes are running
+                if self._last_seen_time is None:
+                    self._logger.info("Detected matching process(es). Monitoring for completion...")
+                    # If we previously notified about completion, resolve the incident
+                    if self._has_notified:
+                        await self._resolve_incident(pd)
+                        self._has_notified = False
                 self._last_seen_time = now
-                self._has_notified = False
                 self._logger.debug(
                     "Found %d matching process(es): %s",
                     len(processes),
@@ -130,9 +137,8 @@ class ProcessMonitor:
 
     async def _send_completion_notification(self, pd: PagerDutyClient) -> None:
         """Send PagerDuty notification that ML job has completed."""
-        dedup_key = f"ml-job-completion:{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         summary = (
-            f"ML Job Completed: No 'uv run atc' processes detected for "
+            f"ML Job Completed: No '{self._pattern.pattern}' processes detected for "
             f"{self._idle_threshold_sec} seconds"
         )
         custom_details: dict[str, Any] = {
@@ -144,7 +150,7 @@ class ProcessMonitor:
 
         try:
             await pd.trigger(
-                dedup_key=dedup_key,
+                dedup_key=self._dedup_key,
                 summary=summary,
                 custom_details=custom_details,
             )
@@ -152,3 +158,14 @@ class ProcessMonitor:
         except Exception as e:
             self._logger.exception("Failed to send PagerDuty notification: %s", e)
             raise
+
+    async def _resolve_incident(self, pd: PagerDutyClient) -> None:
+        """Resolve the PagerDuty incident when processes restart."""
+        try:
+            await pd.resolve(dedup_key=self._dedup_key)
+            self._logger.info(
+                "PagerDuty incident resolved: ML job processes have restarted"
+            )
+        except Exception as e:
+            self._logger.exception("Failed to resolve PagerDuty incident: %s", e)
+            # Don't raise here - we still want to continue monitoring
