@@ -130,6 +130,13 @@ class ProcessMonitor:
                     # We have seen processes before
                     idle_duration = (now - self._last_seen_time).total_seconds()
 
+                    # Log when processes first disappear (idle_duration near 0)
+                    if idle_duration < self._check_interval_sec * 2:
+                        self._logger.info(
+                            "All matching processes have disappeared. Waiting %d seconds before notification...",
+                            self._idle_threshold_sec
+                        )
+
                     if idle_duration >= self._idle_threshold_sec and not self._has_notified:
                         # Threshold exceeded, send notification
                         await self._send_completion_notification(pd)
