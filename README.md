@@ -38,6 +38,7 @@ The monitor will:
 - When processes are detected, track them continuously
 - Send a PagerDuty alert when all processes are gone for the configured threshold (default: 60 seconds)
 - Auto-resolve the PagerDuty incident when processes restart
+- Uses low-priority severity (default: `info`) to avoid alert fatigue
 
 Example `.env` configuration:
 ```bash
@@ -45,6 +46,7 @@ PROCESS_MONITOR_ENABLED=true
 PROCESS_MONITOR_PATTERN=uv run atc
 PROCESS_MONITOR_CHECK_INTERVAL_SEC=5
 PROCESS_MONITOR_IDLE_THRESHOLD_SEC=60
+PROCESS_MONITOR_SEVERITY=info  # info, warning, error, or critical
 ```
 
 ## Kubernetes Deployment
@@ -90,6 +92,7 @@ pagerduty:
 processMonitor:
   enabled: true
   pattern: "uv run atc"
+  severity: "info"  # Low priority for ML jobs
 ```
 
 2. **Install the chart**:

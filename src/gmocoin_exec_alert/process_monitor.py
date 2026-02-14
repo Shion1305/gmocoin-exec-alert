@@ -27,11 +27,13 @@ class ProcessMonitor:
         pattern: str = r"uv run atc",
         check_interval_sec: int = 5,
         idle_threshold_sec: int = 60,
+        severity: str = "info",
         logger: logging.Logger | None = None,
     ) -> None:
         self._pattern = re.compile(pattern)
         self._check_interval_sec = check_interval_sec
         self._idle_threshold_sec = idle_threshold_sec
+        self._severity = severity
         self._logger = logger or logging.getLogger(__name__)
         self._last_seen_time: datetime | None = None
         self._has_notified = False
@@ -153,8 +155,9 @@ class ProcessMonitor:
                 dedup_key=self._dedup_key,
                 summary=summary,
                 custom_details=custom_details,
+                severity=self._severity,
             )
-            self._logger.info("PagerDuty notification sent: %s", summary)
+            self._logger.info("PagerDuty notification sent (severity=%s): %s", self._severity, summary)
         except Exception as e:
             self._logger.exception("Failed to send PagerDuty notification: %s", e)
             raise

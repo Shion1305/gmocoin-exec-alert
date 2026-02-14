@@ -141,6 +141,7 @@ async def _run_once(stop: asyncio.Event) -> None:
             pattern=cfg.process_monitor_pattern,
             check_interval_sec=cfg.process_monitor_check_interval_sec,
             idle_threshold_sec=cfg.process_monitor_idle_threshold_sec,
+            severity=cfg.process_monitor_severity,
             logger=logger,
         )
 
