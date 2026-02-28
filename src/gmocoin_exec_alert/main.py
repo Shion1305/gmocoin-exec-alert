@@ -7,6 +7,7 @@ import signal
 from typing import Any
 
 import websockets
+from websockets.asyncio.client import ClientConnection
 
 from .config import load_config
 from .dedup import DedupCache
@@ -78,7 +79,7 @@ async def _extend_token_loop(
 async def _recv_loop(
     *,
     stop: asyncio.Event,
-    ws: websockets.WebSocketClientProtocol,
+    ws: ClientConnection,
     channels: set[str],
     dedup: DedupCache,
     pd: PagerDutyClient,
