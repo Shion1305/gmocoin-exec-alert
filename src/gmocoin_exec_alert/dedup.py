@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from collections import OrderedDict
 import time
+from collections import OrderedDict
 
 
 class DedupCache:
@@ -39,4 +39,3 @@ class DedupCache:
             if ts > cutoff:
                 break
             self._seen.popitem(last=False)
-

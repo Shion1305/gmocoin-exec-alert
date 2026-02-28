@@ -75,6 +75,7 @@ processMonitor:
   pattern: "uv run atc"
   checkIntervalSec: 5
   idleThresholdSec: 60
+  severity: "info"
 
 # Tuning parameters
 tuning:

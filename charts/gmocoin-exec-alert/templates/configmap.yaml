@@ -13,6 +13,7 @@ data:
   PROCESS_MONITOR_PATTERN: {{ .Values.processMonitor.pattern | quote }}
   PROCESS_MONITOR_CHECK_INTERVAL_SEC: {{ .Values.processMonitor.checkIntervalSec | quote }}
   PROCESS_MONITOR_IDLE_THRESHOLD_SEC: {{ .Values.processMonitor.idleThresholdSec | quote }}
+  PROCESS_MONITOR_SEVERITY: {{ .Values.processMonitor.severity | quote }}
   HTTP_TIMEOUT_SEC: {{ .Values.tuning.httpTimeoutSec | quote }}
   WS_AUTH_EXTEND_INTERVAL_SEC: {{ .Values.tuning.wsAuthExtendIntervalSec | quote }}
   RECONNECT_BACKOFF_BASE_SEC: {{ .Values.tuning.reconnectBackoffBaseSec | quote }}

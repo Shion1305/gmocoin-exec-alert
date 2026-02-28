@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
@@ -60,6 +60,7 @@ class Config:
     process_monitor_pattern: str
     process_monitor_check_interval_sec: int
     process_monitor_idle_threshold_sec: int
+    process_monitor_severity: str
 
 
 def load_config() -> Config:
@@ -102,4 +103,5 @@ def load_config() -> Config:
         process_monitor_pattern=os.getenv("PROCESS_MONITOR_PATTERN", r"uv run atc"),
         process_monitor_check_interval_sec=_getenv_int("PROCESS_MONITOR_CHECK_INTERVAL_SEC", 5),
         process_monitor_idle_threshold_sec=_getenv_int("PROCESS_MONITOR_IDLE_THRESHOLD_SEC", 60),
+        process_monitor_severity=os.getenv("PROCESS_MONITOR_SEVERITY", "info"),
     )

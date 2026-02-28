@@ -35,6 +35,7 @@ class PagerDutyClient:
         component: str | None = None,
         group: str | None = None,
         class_: str | None = None,
+        severity: str | None = None,
     ) -> None:
         if self._dry_run:
             return
@@ -42,7 +43,7 @@ class PagerDutyClient:
         payload: dict[str, Any] = {
             "summary": summary,
             "source": self._source,
-            "severity": self._severity,
+            "severity": severity or self._severity,
             "custom_details": custom_details,
         }
         if component:
@@ -85,4 +86,3 @@ class PagerDutyClient:
             raise RuntimeError(
                 f"PagerDuty resolve error: {resp.status_code} {resp.text} (dedup_key={dedup_key})"
             )
-
