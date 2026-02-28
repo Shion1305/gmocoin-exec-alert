@@ -5,7 +5,7 @@ import logging
 import re
 import subprocess
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from .pagerduty import PagerDutyClient
@@ -69,7 +69,7 @@ class ProcessMonitor:
                                     start_time=start_time,
                                 )
                             )
-                        except ValueError, IndexError:
+                        except ValueError:
                             continue
 
             return processes
@@ -135,7 +135,8 @@ class ProcessMonitor:
                     # Log when processes first disappear (idle_duration near 0)
                     if idle_duration < self._check_interval_sec * 2:
                         self._logger.info(
-                            "All matching processes have disappeared. Waiting %d seconds before notification...",
+                            "All matching processes have disappeared. "
+                            + "Waiting %d seconds before notification...",
                             self._idle_threshold_sec,
                         )
 
