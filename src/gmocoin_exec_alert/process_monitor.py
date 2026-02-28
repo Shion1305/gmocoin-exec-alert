@@ -61,13 +61,15 @@ class ProcessMonitor:
                             pid = int(parts[1])
                             # Get process start time and command
                             start_time = parts[8]  # START column
-                            command = parts[10]    # COMMAND column
-                            processes.append(ProcessInfo(
-                                pid=pid,
-                                command=command,
-                                start_time=start_time,
-                            ))
-                        except (ValueError, IndexError):
+                            command = parts[10]  # COMMAND column
+                            processes.append(
+                                ProcessInfo(
+                                    pid=pid,
+                                    command=command,
+                                    start_time=start_time,
+                                )
+                            )
+                        except ValueError, IndexError:
                             continue
 
             return processes
@@ -134,7 +136,7 @@ class ProcessMonitor:
                     if idle_duration < self._check_interval_sec * 2:
                         self._logger.info(
                             "All matching processes have disappeared. Waiting %d seconds before notification...",
-                            self._idle_threshold_sec
+                            self._idle_threshold_sec,
                         )
 
                     if idle_duration >= self._idle_threshold_sec and not self._has_notified:
@@ -164,7 +166,9 @@ class ProcessMonitor:
                 custom_details=custom_details,
                 severity=self._severity,
             )
-            self._logger.info("PagerDuty notification sent (severity=%s): %s", self._severity, summary)
+            self._logger.info(
+                "PagerDuty notification sent (severity=%s): %s", self._severity, summary
+            )
         except Exception as e:
             self._logger.exception("Failed to send PagerDuty notification: %s", e)
             raise
@@ -173,9 +177,7 @@ class ProcessMonitor:
         """Resolve the PagerDuty incident when processes restart."""
         try:
             await pd.resolve(dedup_key=self._dedup_key)
-            self._logger.info(
-                "PagerDuty incident resolved: ML job processes have restarted"
-            )
+            self._logger.info("PagerDuty incident resolved: ML job processes have restarted")
         except Exception as e:
             self._logger.exception("Failed to resolve PagerDuty incident: %s", e)
             # Don't raise here - we still want to continue monitoring

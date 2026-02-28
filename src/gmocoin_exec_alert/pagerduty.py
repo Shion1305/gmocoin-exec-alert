@@ -86,4 +86,3 @@ class PagerDutyClient:
             raise RuntimeError(
                 f"PagerDuty resolve error: {resp.status_code} {resp.text} (dedup_key={dedup_key})"
             )
-

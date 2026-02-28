@@ -39,4 +39,3 @@ class DedupCache:
             if ts > cutoff:
                 break
             self._seen.popitem(last=False)
-

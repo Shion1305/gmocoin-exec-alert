@@ -182,9 +182,7 @@ async def _run_once(stop: asyncio.Event) -> None:
 
             # Process monitor task (if enabled)
             if process_monitor:
-                monitor_task = asyncio.create_task(
-                    process_monitor.monitor_loop(stop=stop, pd=pd)
-                )
+                monitor_task = asyncio.create_task(process_monitor.monitor_loop(stop=stop, pd=pd))
                 tasks.append(monitor_task)
 
             done, pending = await asyncio.wait(
