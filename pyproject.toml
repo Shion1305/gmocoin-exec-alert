@@ -15,7 +15,7 @@ gmocoin-exec-alert = "gmocoin_exec_alert.main:main"
 
 [dependency-groups]
 dev = [
-  "pytest>=8.0.0",
+  "pytest>=9.0.3",
   "ruff>=0.8.0",
   "mypy>=1.13.0",
 ]
